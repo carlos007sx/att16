@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- REACT LIBRARY -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <!-- REACT DOM LIBRARY -->
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <!-- BABEL LIBRARY -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <title>Exercício 2 - Lista de Produtos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .produto-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #e9ecef;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 5px solid #28a745;
+        }
+        .produto-nome {
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #333;
+        }
+        .produto-preco {
+            font-size: 1.1em;
+            color: #007bff;
+        }
+        .status-disponivel {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .status-esgotado {
+            color: #dc3545;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="raiz"></div>
+    <script type="text/babel">
+        function Produto({ produto }) {
+            return (
+                <div className="produto-item">
+                    <span className="produto-nome">{produto.nome}</span>
+                    <div>
+                        <span className="produto-preco">R$ {produto.preco.toFixed(2)}</span>
+                        {produto.disponivel ? (
+                            <span className="status-disponivel"> (Em estoque)</span>
+                        ) : (
+                            <span className="status-esgotado"> (Esgotado)</span>
+                        )}
+                    </div>
+                </div>
+            );
+        }
+
+        function ListaDeProdutos() {
+            const produtos = [
+                { id: 1, nome: "Notebook Gamer", preco: 5500.00, disponivel: true },
+                { id: 2, nome: "Mouse Sem Fio", preco: 120.50, disponivel: true },
+                { id: 3, nome: "Teclado Mecânico", preco: 300.00, disponivel: false },
+                { id: 4, nome: "Monitor Ultrawide", preco: 1800.00, disponivel: true },
+                { id: 5, nome: "Webcam Full HD", preco: 99.90, disponivel: false }
+            ];
+
+            return (
+                <div className="container">
+                    <h1>Lista de Produtos</h1>
+                    {produtos.map(produto => (
+                        <Produto key={produto.id} produto={produto} />
+                    ))}
+                </div>
+            );
+        }
+
+        const elementoDoApp = document.getElementById("raiz");
+        const aplicacao = ReactDOM.createRoot(elementoDoApp);
+        aplicacao.render(<ListaDeProdutos />);
+    </script>
+</body>
+
+</html>
+

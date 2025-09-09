@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- REACT LIBRARY -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <!-- REACT DOM LIBRARY -->
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <!-- BABEL LIBRARY -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <title>Exercício 3 - Busca de Usuários</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .loading-message {
+            font-size: 1.2em;
+            color: #007bff;
+            text-align: center;
+            margin-top: 20px;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            background-color: #e9ecef;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 5px solid #6f42c1;
+        }
+        li strong {
+            color: #333;
+        }
+        li span {
+            color: #555;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="raiz"></div>
+    <script type="text/babel">
+        function ListaDeUsuarios() {
+            const [usuarios, setUsuarios] = React.useState([]);
+            const [carregando, setCarregando] = React.useState(true);
+
+            React.useEffect(() => {
+                async function buscarUsuarios() {
+                    try {
+                        const resposta = await fetch("https://jsonplaceholder.typicode.com/users");
+                        const dados = await resposta.json();
+                        setUsuarios(dados);
+                    } catch (error) {
+                        console.error("Erro ao buscar usuários:", error);
+                    } finally {
+                        setCarregando(false);
+                    }
+                }
+                buscarUsuarios();
+            }, []); // Array de dependências vazio para rodar apenas uma vez ao montar
+
+            if (carregando) {
+                return (
+                    <div className="container">
+                        <h1>Carregando Usuários...</h1>
+                        <p className="loading-message">Aguarde enquanto buscamos os dados da API.</p>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="container">
+                    <h1>Lista de Usuários da API</h1>
+                    <ul>
+                        {usuarios.map(usuario => (
+                            <li key={usuario.id}>
+                                <strong>{usuario.name}</strong> <span>({usuario.email})</span>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            );
+        }
+
+        const elementoDoApp = document.getElementById("raiz");
+        const aplicacao = ReactDOM.createRoot(elementoDoApp);
+        aplicacao.render(<ListaDeUsuarios />);
+    </script>
+</body>
+
+</html>
+
